@@ -54,44 +54,43 @@ I read comments from three threads before designing anything: a drama thread abo
 
 ## Label Taxonomy
 
-<!-- Each label: a one-sentence definition and two real examples from your
-     reading. Then your decision rule for the hardest boundary.
+My dataset is **comments about basketball**. Comments that aren't about basketball at all (a tangent about what lamb costs at restaurants, favorite Onion headlines, song lyrics typed one word per comment) are out of scope and were left out rather than forced into a label.
 
-     The decision rule is worth a point on its own and it's the thing most
-     people leave out. Every taxonomy has a hardest boundary. Name yours. -->
+### `analysis`
 
-### `label_one`
+**Definition:** Backs up a position with a specific, checkable fact: a stat, a ranking, a date, a contract figure, or a quote.
 
-**Definition:**
+**Example 1:** "And shot 27.5% from 3 because it took them 3 quarters to start hitting some 3s. Thats definitely going to go up and this team will look unstoppable when it does. Embiid takes a couple weeks to get into form too."
 
-**Example 1:**
+**Example 2:** "James and Embiid played 34 and 33 minutes respectively. That's absolutely fine considering we were missing two players who definitely get minutes."
 
->
+### `hot_take`
 
-**Example 2:**
+**Definition:** Takes a confident position someone could argue against, such as a ranking, a prediction, or a judgment of a player or team, with no specific fact offered as support.
 
->
+**Example 1:** "anyone who thinks philly isn't a top 5 team in the league is delusional"
 
-### `label_two`
+**Example 2:** "Jaylen is a child compared to Tatum lol Boston kept the right one…"
 
-**Definition:**
+### `reaction`
 
-**Example 1:**
+**Definition:** Expresses an immediate feeling about something that just happened, without defending a position, even if it mentions a stat in passing.
 
->
+**Example 1:** "Maxey is fucking insane"
 
-**Example 2:**
-
->
+**Example 2:** "I'm crying lmao he used the “Embiid troll” response"
 
 ### The hardest boundary
 
-**Which two labels:**
+**Which two labels:** `analysis` and `hot_take`.
 
-**The decision rule I used every time:**
+The comment that showed me the boundary: "White was literally the least efficient non rookie in the league last year, that report was so disresepctful." It cites a checkable claim, but the tone is heated and the main point is that a report was disrespectful.
 
-<!-- e.g. "If the post names a specific checkable fact, it's `analysis`, even
-     if the tone is heated." -->
+**The decision rule I used every time:** If a comment supports its point with a specific, checkable fact, it's `analysis`, even if the tone is heated or dismissive. Whether the fact is actually correct doesn't matter: I label what the comment offers as support, not whether it's true. A reply in that same thread said "You're making this up," and the White comment is still `analysis`, because the model can only see what a comment claims, not whether it checks out, and verifying every stat would make labeling slow and inconsistent.
+
+**A second rule, for `hot_take` vs. `reaction`:** If a comment stakes out a position someone could argue against, it's a `hot_take`. If it expresses a feeling about something that just happened without defending a position, it's a `reaction`. "Maxey is fucking insane" is a `reaction`; "anyone who thinks philly isn't a top 5 team in the league is delusional" is a `hot_take`.
+
+**A third rule, added after stress-testing:** A number only makes a comment `analysis` if it is backing up a position. A stat mentioned while celebrating, with no argument attached, is a `reaction`. "BRO DID YOU SEE THAT BLOCK. 7 blocks tonight, I'm losing my mind" is a `reaction`; "He's shooting 38% from the field this month, that's just not good enough for a max player" is `analysis`.
 
 ---
 
