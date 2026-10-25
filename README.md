@@ -39,10 +39,16 @@
 
 ## What This Does
 
-<!-- Your community, and what your classifier sorts posts into. Three or four
-     sentences. -->
+**Community:** r/nba, the main NBA subreddit. Public, text-heavy, and active enough to collect hundreds of comments from a few threads.
 
+### What I noticed reading r/nba (Milestone 1)
 
+I read comments from three threads before designing anything: a drama thread about Jaylen Brown and Jayson Tatum, a Sixers vs. Knicks post-game thread, and a thread reacting to an Onion headline about Ben Simmons. Four distinctions showed up in the text:
+
+1. **Some comments cite a specific, checkable fact.** "And shot 27.5% from 3 because it took them 3 quarters to start hitting some 3s." "That stat at the end of they had 28 assists to their 35 made field goals." Most comments don't.
+2. **Some make a confident claim with nothing behind it.** "This guy is insufferable truly." "anyone who thinks philly isn't a top 5 team in the league is delusional."
+3. **Some are an immediate emotional reaction** to something that just happened, with no claim at all. "I'm crying lmao he used the Embiid troll response." "Maxey is fucking insane."
+4. **A large share aren't about basketball.** A long thread on what lamb costs at restaurants, a list of favorite Onion headlines, the Sixers song typed out one word per comment.
 
 ---
 
@@ -59,9 +65,11 @@
 **Definition:**
 
 **Example 1:**
+
 >
 
 **Example 2:**
+
 >
 
 ### `label_two`
@@ -69,9 +77,11 @@
 **Definition:**
 
 **Example 1:**
+
 >
 
 **Example 2:**
+
 >
 
 ### The hardest boundary
@@ -79,10 +89,9 @@
 **Which two labels:**
 
 **The decision rule I used every time:**
+
 <!-- e.g. "If the post names a specific checkable fact, it's `analysis`, even
      if the tone is heated." -->
-
-
 
 ---
 
@@ -98,12 +107,12 @@ Say so plainly — the disclosure is required, not penalised. -->
 
 **Counts per label:**
 
-| Label | Count | Share |
-|---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
-| **Total** |  | 100% |
+| Label     | Count | Share |
+| --------- | ----- | ----- |
+|           |       |       |
+|           |       |       |
+|           |       |       |
+| **Total** |       | 100%  |
 
 **Three hard cases**
 
@@ -111,25 +120,28 @@ Say so plainly — the disclosure is required, not penalised. -->
      been, and what you chose. These are worth more than the easy 190. -->
 
 **1.**
-> *The post:*
+
+> _The post:_
 >
-> *Could have been:*
+> _Could have been:_
 >
-> *I chose, because:*
+> _I chose, because:_
 
 **2.**
-> *The post:*
+
+> _The post:_
 >
-> *Could have been:*
+> _Could have been:_
 >
-> *I chose, because:*
+> _I chose, because:_
 
 **3.**
-> *The post:*
+
+> _The post:_
 >
-> *Could have been:*
+> _Could have been:_
 >
-> *I chose, because:*
+> _I chose, because:_
 
 ---
 
@@ -147,8 +159,6 @@ Say so plainly — the disclosure is required, not penalised. -->
 split. If a label had fewer than about 8 in test, say so — it explains a lot
 of next unit's variance. -->
 
-
-
 ---
 
 ## How I Used AI
@@ -162,15 +172,15 @@ of next unit's variance. -->
 
 **Moment 1**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- _What I asked for:_
+- _What came back:_
+- _What I changed:_
 
 **Moment 2**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- _What I asked for:_
+- _What came back:_
+- _What I changed:_
 
 **Pre-labelling disclosure:**
 
@@ -186,22 +196,22 @@ of next unit's variance. -->
 <!-- Both models on the same posts. `python baseline.py --trained results.json`
      prints this table for you. -->
 
-| Measure | Baseline | Trained | Difference |
-|---|---|---|---|
-| Overall accuracy |  |  |  |
-| Macro F1 |  |  |  |
-| F1 — `label_one` |  |  |  |
-| F1 — `label_two` |  |  |  |
+| Measure          | Baseline | Trained | Difference |
+| ---------------- | -------- | ------- | ---------- |
+| Overall accuracy |          |         |            |
+| Macro F1         |          |         |            |
+| F1 — `label_one` |          |         |            |
+| F1 — `label_two` |          |         |            |
 
 **What I predicted before I looked:**
+
 <!-- Milestone 1 asks you to write this BEFORE seeing the trained numbers. A
      prediction made afterwards isn't one. -->
 
 **What the gap actually means:**
+
 <!-- If the baseline matched your trained model, your fine-tuning added
      nothing — and that is a real finding, not a failure. Say it plainly. -->
-
-
 
 ---
 
@@ -211,30 +221,29 @@ of next unit's variance. -->
      spread table; the Target and Verdict columns are yours. -->
 
 | Criterion | Target | Seed 42 | Seed 7 | Seed 2024 | Verdict |
-|---|---|---|---|---|---|
-| 1.  |  |  |  |  |  |
-| 2.  |  |  |  |  |  |
-| 3.  |  |  |  |  |  |
-| 4.  |  |  |  |  |  |
-| 5.  |  |  |  |  |  |
+| --------- | ------ | ------- | ------ | --------- | ------- |
+| 1.        |        |         |        |           |         |
+| 2.        |        |         |        |           |         |
+| 3.        |        |         |        |           |         |
+| 4.        |        |         |        |           |         |
+| 5.        |        |         |        |           |         |
 
 ### Confusion matrix
 
 <!-- ⚠️ TYPED AS A MARKDOWN TABLE. The notebook prints one ready to paste.
      An image of a matrix earns nothing. -->
 
-| true \ predicted |  |  |  |
-|---|---|---|---|
-| **** |  |  |  |
-| **** |  |  |  |
-| **** |  |  |  |
+| true \ predicted |     |     |     |
+| ---------------- | --- | --- | --- |
+| \*\*\*\*         |     |     |     |
+| \*\*\*\*         |     |     |     |
+| \*\*\*\*         |     |     |     |
 
 **My biggest off-diagonal number, and what it means:**
+
 <!-- Not "the model made mistakes" — WHICH boundary it didn't learn, and which
      direction. "7 real analysis posts were called hot_take and only 3 went the
      other way" is a direction, not just an error rate. -->
-
-
 
 ---
 
@@ -243,13 +252,13 @@ of next unit's variance. -->
 <!-- MET or MISSED against LAST UNIT's target. The target has to hold across
      all three seeds, not turn up sometimes. -->
 
-| # | Criterion | Target | Verdict | How I decided |
-|---|---|---|---|---|
-| 1 |  |  |  |  |
-| 2 |  |  |  |  |
-| 3 |  |  |  |  |
-| 4 |  |  |  |  |
-| 5 |  |  |  |  |
+| #   | Criterion | Target | Verdict | How I decided |
+| --- | --------- | ------ | ------- | ------------- |
+| 1   |           |        |         |               |
+| 2   |           |        |         |               |
+| 3   |           |        |         |               |
+| 4   |           |        |         |               |
+| 5   |           |        |         |               |
 
 **Diagnoses**
 
@@ -262,8 +271,6 @@ of next unit's variance. -->
      have that can tell a LABELLING problem from a MODEL problem, and this
      section is graded on whether you used it that way. -->
 
-
-
 ---
 
 ## Agreement Report
@@ -274,7 +281,7 @@ of next unit's variance. -->
      data/staff_taxonomy.md, not your own — so every argument below is made
      from those definitions and those decision rules. -->
 
-**Agreement rate:** ___ / 30 = ___%
+**Agreement rate:** **_ / 30 = _**%
 
 <!-- Nobody grades this number. A 60% who argues every disagreement from the
      stated rules beats a 95% who wrote "staff was right" nine times. Several
@@ -297,26 +304,26 @@ of next unit's variance. -->
      what you did across your own 200. -->
 
 **1.**
-> *The post:*
+
+> _The post:_
 >
-> *Staff said / I said:*
+> _Staff said / I said:_
 >
-> *My call, and why:*
+> _My call, and why:_
 >
-> *Which pile:*
+> _Which pile:_
 
 **2.**
-> *The post:*
+
+> _The post:_
 >
-> *Staff said / I said:*
+> _Staff said / I said:_
 >
-> *My call, and why:*
+> _My call, and why:_
 >
-> *Which pile:*
+> _Which pile:_
 
 **What the pattern in my disagreements tells me:**
-
-
 
 ---
 
@@ -329,19 +336,17 @@ of next unit's variance. -->
 ### Run Log — After
 
 | Criterion | Target | Seed 42 | Seed 7 | Seed 2024 | Verdict |
-|---|---|---|---|---|---|
-| 1.  |  |  |  |  |  |
-| 2.  |  |  |  |  |  |
-| 3.  |  |  |  |  |  |
-| 4.  |  |  |  |  |  |
-| 5.  |  |  |  |  |  |
+| --------- | ------ | ------- | ------ | --------- | ------- |
+| 1.        |        |         |        |           |         |
+| 2.        |        |         |        |           |         |
+| 3.        |        |         |        |           |         |
+| 4.        |        |         |        |           |         |
+| 5.        |        |         |        |           |         |
 
 **Did it help, and how do I know:**
 
 <!-- If it didn't, say so. Relabelling that didn't help is a genuinely
      interesting result and earns full credit. -->
-
-
 
 ---
 
@@ -349,13 +354,10 @@ of next unit's variance. -->
 
 <!-- For each criterion still missed: what you'd do, and why you stopped. -->
 
-
-
 **The gap between what I meant my labels to capture and what the model
 learned:**
+
 <!-- Two sentences. Your confusion matrix is the evidence. -->
-
-
 
 <!-- ═════════════════════════════════════════════════════════════════════
 
