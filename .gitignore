@@ -31,3 +31,7 @@ Thumbs.db
 
 raw_comments.txt
 raw_posts.csv
+
+skipped.txt
+
+to_prelabel.csv
