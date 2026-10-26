@@ -39,7 +39,7 @@
 
 ## What This Does
 
-**Community:** r/nba, the main NBA subreddit. Public, text-heavy, and active enough to collect hundreds of comments from a few threads.
+TakeMeter sorts comments from r/nba, the main NBA subreddit, into three kinds of basketball discussion: `analysis`, which backs a position with a specific, checkable fact; `hot_take`, which takes a confident position with no fact behind it; and `reaction`, which expresses a feeling about something that just happened. It is a DistilBERT model fine-tuned on 240 comments I collected and labeled from four r/nba threads. Comments that aren't about basketball are outside its scope.
 
 ### What I noticed reading r/nba (Milestone 1)
 
@@ -96,97 +96,85 @@ The comment that showed me the boundary: "White was literally the least efficien
 
 ## The Dataset
 
-<!-- Where you collected from, how you labelled, your counts, and three hard
-     cases. -->
+**Where the posts came from:** Four public r/nba threads: a drama thread about Jaylen Brown and Jayson Tatum, a Sixers vs. Knicks post-game thread, a thread reacting to an Onion headline about Ben Simmons, and a Sixers vs. Cavaliers post-game thread. Reddit blocks unauthenticated scripts (both reddit.com and old.reddit.com returned 403), so I opened each thread in my browser and copied its comments with one line in the developer console. `build_csv.py` then joined multi-line comments, dropped deleted comments, bare links, anything under 20 or over 700 characters, and duplicates. That left 722 candidate comments.
 
-**Where the posts came from:**
-
-**How I labelled them:** <!-- Cold first? Pre-labelled with AI and corrected?
-Say so plainly — the disclosure is required, not penalised. -->
+**How I labelled them:** I labeled 20 comments cold, with no AI help, using `label.py`. They are marked `cold` in the note column. Every other row was labeled by Claude Code applying my three definitions and decision rules. Comments not about basketball, including comments about the subreddit or its users rather than the game, were left out instead of forced into a label. After the first pass, `analysis` was only 13.7% of the data, so I ran a second, targeted pass over the remaining unlabeled comments that kept only `analysis` rows, adding 28. I also removed 9 rows that had been labeled twice.
 
 **Counts per label:**
 
-| Label     | Count | Share |
-| --------- | ----- | ----- |
-|           |       |       |
-|           |       |       |
-|           |       |       |
-| **Total** |       | 100%  |
+| Label      | Count   | Share |
+| ---------- | ------- | ----- |
+| `hot_take` | 107     | 44.6% |
+| `reaction` | 76      | 31.7% |
+| `analysis` | 57      | 23.8% |
+| **Total**  | **240** | 100%  |
 
 **Three hard cases**
 
-<!-- Any post that made you pause: what it was, which two labels it could have
-     been, and what you chose. These are worth more than the easy 190. -->
-
 **1.**
 
-> _The post:_
+> _The post:_ "White was literally the least efficient non rookie in the league last year, that report was so disresepctful."
 >
-> _Could have been:_
+> _Could have been:_ `analysis` or `hot_take`
 >
-> _I chose, because:_
+> _I chose, because:_ `analysis`. It cites a checkable ranking, even though the tone is heated and the main point is that a report was disrespectful. A reply in the same thread said "You're making this up," but my rule labels what a comment offers as support, not whether it's true. This is the comment my hardest-boundary rule was built on.
 
 **2.**
 
-> _The post:_
+> _The post:_ "LeBron is 100% the reason they didnt get blown out by 20. Huge 3rd from him and he kept their heads in it."
 >
-> _Could have been:_
+> _Could have been:_ `analysis` or `hot_take`
 >
-> _I chose, because:_
+> _I chose, because:_ I labeled it `analysis` in my cold pass, but under my own written rule it's a `hot_take`: "huge 3rd" isn't a specific stat, and "100% the reason" is a judgment. Reading my cold labels back, six of my seven `analysis` labels had reasoning but no checkable fact. I had been labeling "argued vs. unargued" instead of "fact vs. no fact." I kept all 20 cold labels unchanged as an honest record and held the written rule for everything after.
 
 **3.**
 
-> _The post:_
+> _The post:_ "49-19 against the Knicks. 29-11 at MSG. 20 plus years of belt"
 >
-> _Could have been:_
+> _Could have been:_ `analysis` or `reaction`
 >
-> _I chose, because:_
+> _I chose, because:_ `reaction`. It's full of checkable records, but none of them backs up a position: it's a fan celebrating a rivalry win. Under my third rule, a stat only makes a comment `analysis` if it supports an argument. It was first labeled `analysis` and changed to `reaction` on a second pass for exactly that reason.
 
 ---
 
 ## The Training Run
 
-<!-- Your starting model, your settings, and anything you changed and why. -->
+**Base model:** `distilbert-base-uncased`, trained on CPU (`torch 2.14.1+cpu`).
 
-**Base model:**
+**Settings:** 3 epochs, learning rate 2e-5, batch size 16, max length 128 tokens, seed 42.
 
-**Settings:** <!-- epochs, learning rate, batch size, seed -->
+**Anything I changed from the defaults, and why:** Nothing. I kept every default.
 
-**Anything I changed from the defaults, and why:**
+**Split sizes:**
 
-**Split sizes:** <!-- train / val / test, and per-label counts in the test
-split. If a label had fewer than about 8 in test, say so — it explains a lot
-of next unit's variance. -->
+|            | train   | val    | test   |
+| ---------- | ------- | ------ | ------ |
+| `analysis` | 40      | 8      | 9      |
+| `hot_take` | 75      | 16     | 16     |
+| `reaction` | 53      | 12     | 11     |
+| **Total**  | **168** | **36** | **36** |
+
+`analysis` has 9 examples in the test split, so a single wrong answer moves its F1 by roughly 11 points.
+
+One thing I noticed while it trained: validation accuracy stayed at 0.472 and macro F1 at 0.260 across all three epochs, even as training loss fell from 1.07 to 0.94. With 168 training comments at batch size 16, the run is only 33 steps in total. I've left the settings as they are for this unit and will look at this properly next unit.
 
 ---
 
 ## How I Used AI
 
-<!-- Two specific moments — what you asked, what came back, what you changed.
-
-     ⚠️ Plus disclosure of any pre-labelling. If you had a model pre-label a
-     batch and then read and corrected every one, say that. It's an allowed
-     workflow and disclosing it costs you nothing. Not disclosing it is the
-     problem. -->
-
 **Moment 1**
 
-- _What I asked for:_
-- _What came back:_
-- _What I changed:_
+- _What I asked for:_ After writing my three definitions, I asked Claude to write eight r/nba-style posts that sit right on the boundaries between my labels, then labeled them myself.
+- _What came back:_ Seven I could place cleanly. One, "BRO DID YOU SEE THAT BLOCK. 7 blocks tonight, I'm losing my mind", I hesitated on between `analysis` and `reaction`, because my rule at the time said any checkable fact made a comment `analysis`.
+- _What I changed:_ I added a third rule: a stat only makes a comment `analysis` if it backs up a position. A number mentioned while celebrating is a `reaction`. I updated the `analysis` and `reaction` definitions in the README and in `label_definitions.txt` to match, before labeling anything.
 
 **Moment 2**
 
-- _What I asked for:_
-- _What came back:_
-- _What I changed:_
+- _What I asked for:_ A script to collect r/nba comments automatically.
+- _What came back:_ A script using Reddit's JSON endpoints. Both reddit.com and old.reddit.com returned 403, because Reddit blocks scripts that aren't logged in.
+- _What I changed:_ I switched to copying comments from my own browser with one console command, then had Claude write `build_csv.py` to clean and deduplicate them. Its first version dropped anything under 60 characters. When I worked out that "Maxey is fucking insane" was a `reaction` and only 22 characters long, I realized that cutoff was quietly removing most reactions, so I lowered it to 20. The pool went from 334 comments to 537.
 
-**Pre-labelling disclosure:**
-
-<!-- ═══════════════════════ UNIT 6 — THE TEST ═══════════════════════
-
-     Don't fill these in during unit 5.
-     ═══════════════════════════════════════════════════════════════════ -->
+**Pre-labelling disclosure:** The 20 rows marked `cold` in `labels.csv` I labeled myself with no AI help. Every other row was labeled by Claude Code applying my definitions and decision rules, including the 28 rows from the targeted `analysis` pass.
 
 ---
 
