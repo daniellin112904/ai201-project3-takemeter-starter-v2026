@@ -205,7 +205,7 @@ Trained on CPU (`torch 2.14.1+cpu`), default settings, seeds 42, 7 and 2024. Fro
 | 1. Overall accuracy       | ≥ 0.65 every seed                                               | 0.472                    | 0.444                    | 0.500                    | MISSED  |
 | 2. Per-label F1           | `hot_take` and `reaction` ≥ 0.60, `analysis` ≥ 0.50, every seed | a 0.00 · h 0.63 · r 0.17 | a 0.00 · h 0.62 · r 0.00 | a 0.00 · h 0.64 · r 0.31 | MISSED  |
 | 3. Label balance          | max ≤ 50%, min ≥ 20%                                            | max 44.6%, min 23.8%     | same                     | same                     | MET     |
-| 4. Agreement with staff   | ≥ 24 of 30                                                      | pending                  | pending                  | pending                  | pending |
+| 4. Agreement with staff   | ≥ 24 of 30                                                      | 30 of 30                 | same                     | same                     | MET     |
 | 5. Beat baseline accuracy | ≥ +10 points every seed                                         | +19.4                    | +16.7                    | +8.3                     | MISSED  |
 
 Criterion 3 is a property of `labels.csv`, measured before training, so it is the same on every seed. Criterion 4 is measured once, against the staff set.
@@ -272,55 +272,45 @@ Seed 42, from section 7.
 
 ## Agreement Report
 
-<!-- Your rate against the staff set, and every disagreement adjudicated.
+**Agreement rate:** 30 / 30 = 100%
 
-     Remember you labelled these 30 under the STAFF taxonomy in
-     data/staff_taxonomy.md, not your own — so every argument below is made
-     from those definitions and those decision rules. -->
-
-**Agreement rate:** **_ / 30 = _**%
-
-<!-- Nobody grades this number. A 60% who argues every disagreement from the
-     stated rules beats a 95% who wrote "staff was right" nine times. Several
-     of the 30 were chosen because they're genuinely ambiguous — you should be
-     winning some of these. -->
+I labeled all 30 posts in `data/staff_posts.csv` under the staff taxonomy in `data/staff_taxonomy.md` using `staff_label.py`, committed `my_staff_labels.csv`, and only then got `staff_labels.csv`. `agreement.py` found no disagreements.
 
 **Disagreements**
 
-<!-- Three lines each: the post, both labels, and who you think is right and
-     why — grounded in the staff definitions you were both applying.
-
-     Then sort each into one of three piles:
-       (a) the rule covered it and I applied it loosely → a consistency problem
-       (b) the rule genuinely doesn't say               → a gap in the definitions
-       (c) the rule is ambiguous here and my reading is defensible → argue it.
-           This is a legitimate win.
-
-     Pile (a) is the one that matters most for your diagnosis: if you applied a
-     written rule two different ways on 30 posts, that is direct evidence about
-     what you did across your own 200. -->
+None. Since there is nothing to adjudicate, here is the evidence on whether the set was easy or the rule was applied tightly. Staff marked 7 of the 30 posts as borderline, each with a note beginning "HARD", and I matched staff on all 7. Three of them sit exactly on boundaries where my own unit 5 taxonomy would have pulled me the other way:
 
 **1.**
 
-> _The post:_
+> _The post:_ "Times are down about 3% since the shoe rules changed, so obviously the shoes are the whole story and the sport has a problem."
 >
-> _Staff said / I said:_
+> _Staff said / I said:_ `hot_take` / `hot_take`
 >
-> _My call, and why:_
+> _My call, and why:_ Staff rule 1 asks whether the fact is load-bearing. Here "so obviously" does the work and the 3% is decoration on a conclusion already reached. Under my own unit 5 rule, any checkable fact backing a position is `analysis`, so this post is where the two taxonomies disagree most, and I applied theirs.
 >
-> _Which pile:_
+> _Which pile:_ none, agreed.
 
 **2.**
 
-> _The post:_
+> _The post:_ "Third DNF this year. I don't really want to talk about it, just wanted to put it somewhere."
 >
-> _Staff said / I said:_
+> _Staff said / I said:_ `reaction` / `reaction`
 >
-> _My call, and why:_
+> _My call, and why:_ "Third this year" is countable, but nothing is argued from it; the writer is reporting their own state. This is the same idea as my own third rule, that a number only makes a post `analysis` if it backs a position.
 >
-> _Which pile:_
+> _Which pile:_ none, agreed.
 
-**What the pattern in my disagreements tells me:**
+**3.**
+
+> _The post:_ "Nobody actually enjoys the long run. They enjoy having done it, which is a completely different thing, and the sport would be more honest if it said so."
+>
+> _Staff said / I said:_ `hot_take` / `hot_take`
+>
+> _My call, and why:_ It reads reflective, almost like a `reaction`, but staff rule 2 asks whether it reports the writer's experience or makes a general claim. It claims something about everyone, so it's a `hot_take`.
+>
+> _Which pile:_ none, agreed.
+
+**What the pattern in my disagreements tells me:** With no disagreements, the useful finding is about consistency. Matching staff on all 7 of their hard cases is evidence that I can apply a written boundary rule the way its authors intended, including on the post built to separate "a fact that carries the argument" from "a fact used as decoration." Two caveats. First, the staff file was ordered in blocks of ten per label, which may have made the set easier than a shuffled one. Second, this measures my own labeling, which covers the 20 cold rows in `labels.csv`; the other 220 were labeled by Claude Code under my rules, so this result doesn't vouch for those directly.
 
 ---
 
