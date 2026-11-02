@@ -174,6 +174,12 @@ One thing I noticed while it trained: validation accuracy stayed at 0.472 and ma
 - _What came back:_ A script using Reddit's JSON endpoints. Both reddit.com and old.reddit.com returned 403, because Reddit blocks scripts that aren't logged in.
 - _What I changed:_ I switched to copying comments from my own browser with one console command, then had Claude write `build_csv.py` to clean and deduplicate them. Its first version dropped anything under 60 characters. When I worked out that "Maxey is fucking insane" was a `reaction` and only 22 characters long, I realized that cutoff was quietly removing most reactions, so I lowered it to 20. The pool went from 334 comments to 537.
 
+**Moment 3 (unit 6)**
+
+- _What I asked for:_ Help reading my first three-seed results and deciding what to fix.
+- _What came back:_ Claude pointed out that the baseline had only been run on seed 42's test split, while my criterion 5 is judged on every seed, so the criterion couldn't get an honest verdict. It also pointed out that the confusion matrix sent every label to `hot_take`, not just one pair, which argued against the notebook's automatic suggestion that the problem was my labeling.
+- _What I changed:_ I ran `baseline.py` on seeds 7 and 2024's test splits myself. Seed 2024 turned criterion 5 from a pass into a miss, by 1.7 points. I then weighed the four common causes against my evidence, ruled out labeling and a hard label pair, and chose more epochs as my one improvement.
+
 **Pre-labelling disclosure:** The 20 rows marked `cold` in `labels.csv` I labeled myself with no AI help. Every other row was labeled by Claude Code applying my definitions and decision rules, including the 28 rows from the targeted `analysis` pass.
 
 ---
@@ -314,35 +320,53 @@ None. Since there is nothing to adjudicate, here is the evidence on whether the 
 
 ## The Improvement
 
-**What I changed:**
+**What I changed:** One training setting: `EPOCHS` from 3 to 10 in section 2 of the notebook. Everything else stayed the same: labels, taxonomy, criteria, learning rate 2e-5, batch size 16, max length 128, and the same three seeds. This took training from 33 optimization steps to 110.
 
-**Which diagnosis pointed at it:**
+**Which diagnosis pointed at it:** My diagnosis concluded the model barely trained. It called 35 of 36 test comments `hot_take`, validation accuracy barely moved across epochs within each seed, and training loss only fell from about 1.07 to 0.94. My agreement check ruled out inconsistent labeling on my part, and the baseline's `analysis` F1 of 0.40 showed that label was recognizable from wording. That left training. Of the two training settings that fit, I chose more epochs over a higher learning rate because my diagnosis was specifically that there were too few steps, and more epochs tests that directly.
 
 ### Run Log — After
 
-| Criterion | Target | Seed 42 | Seed 7 | Seed 2024 | Verdict |
-| --------- | ------ | ------- | ------ | --------- | ------- |
-| 1.        |        |         |        |           |         |
-| 2.        |        |         |        |           |         |
-| 3.        |        |         |        |           |         |
-| 4.        |        |         |        |           |         |
-| 5.        |        |         |        |           |         |
+Trained on CPU (`torch 2.14.1+cpu`), 10 epochs, seeds 42, 7 and 2024. From `results_three_seeds_after.json`. Criterion 5 compares against the same per-seed baseline numbers as the before run.
 
-**Did it help, and how do I know:**
+| Criterion                 | Target                                                          | Seed 42                  | Seed 7                   | Seed 2024                | Verdict |
+| ------------------------- | --------------------------------------------------------------- | ------------------------ | ------------------------ | ------------------------ | ------- |
+| 1. Overall accuracy       | ≥ 0.65 every seed                                               | 0.889                    | 0.806                    | 0.778                    | MET     |
+| 2. Per-label F1           | `hot_take` and `reaction` ≥ 0.60, `analysis` ≥ 0.50, every seed | a 0.82 · h 0.88 · r 0.95 | a 0.67 · h 0.80 · r 0.91 | a 0.67 · h 0.81 · r 0.80 | MET     |
+| 3. Label balance          | max ≤ 50%, min ≥ 20%                                            | max 44.6%, min 23.8%     | same                     | same                     | MET     |
+| 4. Agreement with staff   | ≥ 24 of 30                                                      | 30 of 30                 | same                     | same                     | MET     |
+| 5. Beat baseline accuracy | ≥ +10 points every seed                                         | +61.1                    | +52.8                    | +36.1                    | MET     |
 
-<!-- If it didn't, say so. Relabelling that didn't help is a genuinely
-     interesting result and earns full credit. -->
+**The spread across seeds, after:**
+
+| Measure          | Seed 42 | Seed 7 | Seed 2024 | Spread |
+| ---------------- | ------- | ------ | --------- | ------ |
+| Overall accuracy | 0.889   | 0.806  | 0.778     | 0.111  |
+| Macro F1         | 0.886   | 0.792  | 0.759     | 0.127  |
+| F1 — `analysis`  | 0.824   | 0.667  | 0.667     | 0.157  |
+| F1 — `hot_take`  | 0.882   | 0.800  | 0.811     | 0.082  |
+| F1 — `reaction`  | 0.952   | 0.909  | 0.800     | 0.152  |
+
+**Confusion matrix, after** (seed 42):
+
+| true \ predicted | analysis | hot_take | reaction |
+| ---------------- | -------- | -------- | -------- |
+| **analysis**     | 7        | 2        | 0        |
+| **hot_take**     | 1        | 15       | 0        |
+| **reaction**     | 0        | 1        | 10       |
+
+**Did it help, and how do I know:** Yes, clearly. All three missed criteria are now met on every seed, and the margins aren't close: the lowest accuracy is 0.778 against a target of 0.65, and the lowest `analysis` F1 is 0.667 against 0.50. `analysis` went from 0.00 on all three seeds to between 0.67 and 0.82, so the model went from never predicting it to getting most of it right. The confusion matrix shows the collapse is gone: instead of 35 of 36 comments called `hot_take`, the model gets 32 of 36 right on seed 42, and its remaining mistakes sit on the `analysis` and `hot_take` boundary, the one my main decision rule was written for. That the fix was more training, not relabeling, supports the diagnosis that the problem was training rather than my labels.
 
 ---
 
 ## What's Still Broken
 
-<!-- For each criterion still missed: what you'd do, and why you stopped. -->
+Every criterion is met after the improvement, so nothing on my list is still missed. Three things are still weak:
 
-**The gap between what I meant my labels to capture and what the model
-learned:**
+1. **The results aren't stable enough to trust the exact numbers.** Accuracy moved 11.1 points across seeds after the improvement (0.778 to 0.889), past the 10-point line where the notebook calls a measure unstable. Every seed still clears 0.65 by a wide margin, so the verdicts hold, but the specific accuracy depends on which 36 comments land in the test set. Each test comment is worth about 2.8 points. The fix would be more labeled data, so the test split is bigger. I stopped because the improvement rule allows one change, and adding data would be a second.
+2. **`analysis` is still the weakest and jumpiest label.** Its F1 ranges from 0.667 to 0.824 across seeds. It has only 9 test examples per split, so one miss moves its F1 by roughly 11 points.
+3. **Most of my training labels weren't checked by me.** 220 of the 240 rows were labeled by Claude Code under my rules. My agreement check shows I apply boundary rules consistently, but it can't vouch for those rows. Spot-checking a random sample of them against my own judgment would tell me how much label noise the model is learning from.
 
-<!-- Two sentences. Your confusion matrix is the evidence. -->
+**The gap between what I meant my labels to capture and what the model learned:** I meant `analysis` to mean "argued with a checkable fact," and the remaining confusion is exactly there: on seed 42, 2 real `analysis` comments were called `hot_take` and 1 went the other way, while `reaction` was almost perfectly separated. The model has learned that tone and immediacy separate a `reaction` from the other two, but it hasn't fully learned whether a number is carrying an argument or just appearing in a confident claim, which is the one distinction my taxonomy depends on most.
 
 <!-- ═════════════════════════════════════════════════════════════════════
 
