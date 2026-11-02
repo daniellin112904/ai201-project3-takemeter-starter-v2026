@@ -246,27 +246,25 @@ Seed 42, from section 7.
 
 ## Verdicts and Diagnoses
 
-<!-- MET or MISSED against LAST UNIT's target. The target has to hold across
-     all three seeds, not turn up sometimes. -->
-
-| #   | Criterion | Target | Verdict | How I decided |
-| --- | --------- | ------ | ------- | ------------- |
-| 1   |           |        |         |               |
-| 2   |           |        |         |               |
-| 3   |           |        |         |               |
-| 4   |           |        |         |               |
-| 5   |           |        |         |               |
+| #   | Criterion              | Target                                                          | Verdict | How I decided                                                                                                                        |
+| --- | ---------------------- | --------------------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | Overall accuracy       | ≥ 0.65 every seed                                               | MISSED  | 0.472, 0.444 and 0.500. No seed came within 15 points of the target.                                                                 |
+| 2   | Per-label F1           | `hot_take` and `reaction` ≥ 0.60, `analysis` ≥ 0.50, every seed | MISSED  | `hot_take` cleared 0.60 on all three seeds, but `analysis` was 0.00 on all three and `reaction` never passed 0.31.                   |
+| 3   | Label balance          | max ≤ 50%, min ≥ 20%                                            | MET     | `hot_take` 44.6%, `reaction` 31.7%, `analysis` 23.8% in `labels.csv`.                                                                |
+| 4   | Agreement with staff   | ≥ 24 of 30                                                      | MET     | 30 of 30, including all 7 posts staff marked as hard.                                                                                |
+| 5   | Beat baseline accuracy | ≥ +10 points every seed                                         | MISSED  | +19.4 and +16.7 on seeds 42 and 7, but +8.3 on seed 2024. The target has to hold on every seed, so a pass on two of three is a miss. |
 
 **Diagnoses**
 
-<!-- For each miss: the cause, and how you know. The four common causes are:
-     too few examples for a label, a boundary you applied inconsistently, a
-     genuinely hard label pair, and a task the model can't reach from this
-     much data.
+All three misses come from one cause, not three: **the model barely trained, and collapsed to predicting my most common label.** On seed 42 it called 35 of 36 test comments `hot_take`. That explains criterion 1 (accuracy can't rise far above the `hot_take` share of the test set), criterion 2 (`analysis` scores 0.00 because the model never predicts it), and criterion 5 (when the model only guesses one label, its accuracy is fixed near 0.44 to 0.50, so a baseline that gets a friendly split, as it did on seed 2024 at 0.417, closes the gap).
 
-     ⚠️ Use your agreement report as evidence. It is the only instrument you
-     have that can tell a LABELLING problem from a MODEL problem, and this
-     section is graded on whether you used it that way. -->
+Here is how I ruled out the other causes:
+
+- **Inconsistent labeling.** My agreement check is the evidence here. I matched staff on 30 of 30 posts, including all 7 they marked as hard, and three of those sit on the exact boundaries my taxonomy depends on. If I applied boundary rules loosely, I would expect disagreements on precisely those posts. A labeling problem would also show up as confusion concentrated on one label pair; instead the matrix shows every label sent to `hot_take`. One limit: the agreement check measures my own labeling, which covers the 20 cold rows. The other 220 training rows were labeled by Claude Code under my rules, so this rules out inconsistency on my part, not in the AI-labeled rows.
+- **A genuinely hard label pair.** If one boundary were hard, the model would mix up that pair and get the others right. It didn't separate any pair. And the untrained baseline reached an `analysis` F1 of 0.40 from my definitions alone, so `analysis` is recognizable from wording.
+- **Too few examples.** This may contribute: `analysis` has only 40 training examples, and the whole training set is 168. But it can't be the main cause, because the model also learned almost nothing beyond guessing `hot_take`, the label with the most examples.
+
+The evidence points at **training**. Within each seed, validation accuracy barely moved across epochs (flat at 0.472 on seed 42, flat at 0.444 on seed 7, and only 0.556 to 0.583 on seed 2024), while training loss fell only from about 1.07 to 0.94. With 168 training comments at batch size 16, three epochs is just 33 optimization steps. The model never got far enough from its starting point to change its answers.
 
 ---
 
