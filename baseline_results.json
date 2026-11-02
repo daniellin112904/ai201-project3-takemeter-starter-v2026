@@ -1,0 +1,214 @@
+{
+  "model": "facebook/bart-large-mnli",
+  "n": 36,
+  "seed": 42,
+  "held_out": true,
+  "used_definitions": true,
+  "scores": {
+    "n": 36,
+    "accuracy": 0.2777777777777778,
+    "f1_macro": 0.22424242424242422,
+    "per_label": {
+      "analysis": {
+        "precision": 0.2692307692307692,
+        "recall": 0.7777777777777778,
+        "f1": 0.39999999999999997,
+        "support": 9
+      },
+      "hot_take": {
+        "precision": 0.5,
+        "recall": 0.1875,
+        "f1": 0.2727272727272727,
+        "support": 16
+      },
+      "reaction": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 11
+      }
+    }
+  },
+  "predictions": [
+    {
+      "text": "It's cool to have someone with star potential that is okay taking a step back and doing the dirty work. Sixers will recognize this and give him some games this year where he has control of the offense.",
+      "gold": "hot_take",
+      "predicted": "analysis"
+    },
+    {
+      "text": "LET ME WORK.... PLEASE LET ME WORK!",
+      "gold": "reaction",
+      "predicted": "analysis"
+    },
+    {
+      "text": "Maxey is the only player who went above 35 minutes and the Sixers will have Dean Wade soon. Seems pretty reasonable to me?",
+      "gold": "analysis",
+      "predicted": "analysis"
+    },
+    {
+      "text": "But also, it's understandable if he feels a way about what happened.",
+      "gold": "hot_take",
+      "predicted": "reaction"
+    },
+    {
+      "text": "He slowly became solid defensively in Boston last year, I think Joe really helped him develop his off-ball rotation awareness.",
+      "gold": "hot_take",
+      "predicted": "analysis"
+    },
+    {
+      "text": "People criticise Ben for never adding to his game or working on his deficiencies. But a quick look at basketball reference will show that these people are haters. In his rookie season he shot 0.1 3pt shots a game, 4 years later he literally doubled his production to 0.2 3pt shots a game. Then his back injuries happened and he was never the same.",
+      "gold": "analysis",
+      "predicted": "analysis"
+    },
+    {
+      "text": "76ers won this game without Dean Wade and Dominick Barlow by the way",
+      "gold": "analysis",
+      "predicted": "analysis"
+    },
+    {
+      "text": "White was literally the least efficient non rookie in the league last year, that report was so disresepctful.",
+      "gold": "analysis",
+      "predicted": "analysis"
+    },
+    {
+      "text": "Lakers fans were made fun of for being idiots for getting pissed at Bam. Ben Simmons suffered season ending injury. It's always in bad taste to make fun of people's misfortune.",
+      "gold": "hot_take",
+      "predicted": "hot_take"
+    },
+    {
+      "text": "As the great Loaded lux once said 'The tension is thicker than German Guard Dogs' This is what I like to see... Game needs more of this. Shit is too friendly at times",
+      "gold": "hot_take",
+      "predicted": "reaction"
+    },
+    {
+      "text": "they had an 8 man rotation, plus Wade and Barlow are injured and Philon will get more mins in less high stakes games",
+      "gold": "analysis",
+      "predicted": "analysis"
+    },
+    {
+      "text": "In 2020-2021 Sixers were the #1 seed in the East (don't talk about the playoffs), while the 2020 Eagles were one of the worst teams in the league.",
+      "gold": "analysis",
+      "predicted": "analysis"
+    },
+    {
+      "text": "I forgot we like to spread misinformation here but that wasn\u2019t the report. Windhorst said something about White having a more impactful season not that BS you\u2019re peddling.",
+      "gold": "analysis",
+      "predicted": "hot_take"
+    },
+    {
+      "text": "when friends become enemies",
+      "gold": "reaction",
+      "predicted": "analysis"
+    },
+    {
+      "text": "Yeah I\u2019m pretty much used to Waluigi just shitting on us every single game. Someone finally got the memo",
+      "gold": "reaction",
+      "predicted": "analysis"
+    },
+    {
+      "text": "Sixers will only truly be good when they can win playing Nick Nurse at center, Lebron's pilot at the PF, Maxeys mom at the SF, with the ying yang twins in the guard spots. Anything else and you're running your stars on the court too much and it won't be sustainable.",
+      "gold": "hot_take",
+      "predicted": "analysis"
+    },
+    {
+      "text": "LeBron you can go, Ben Simmons is (was) here. \ud83e\udee1",
+      "gold": "reaction",
+      "predicted": "analysis"
+    },
+    {
+      "text": "imagine how many he'd be attempting 300 years from now, next gen Steph Curry",
+      "gold": "reaction",
+      "predicted": "analysis"
+    },
+    {
+      "text": "I really like Nurse's defensive adjustments and schemes but his ATO plays are brutal. Having Bron will help with that but he gotta improve on that",
+      "gold": "hot_take",
+      "predicted": "analysis"
+    },
+    {
+      "text": "Say what you really wanna say JB. You\u2019re saying Tatum has a hell of a pr team but then you just say lamb chops and not give in to whatever issues that you\u2019re hinting at.",
+      "gold": "hot_take",
+      "predicted": "reaction"
+    },
+    {
+      "text": "Gotta hand it to him it's actually a great line and he was clearly working on it for a bit.",
+      "gold": "reaction",
+      "predicted": "analysis"
+    },
+    {
+      "text": "They chose Tatum get over it man and enjoy the franchise that passed up on you a decade ago and been rooting for you to tear your ACL for just as long",
+      "gold": "hot_take",
+      "predicted": "analysis"
+    },
+    {
+      "text": "Didn\u2019t hurt that it happened after he had a spectacular game",
+      "gold": "hot_take",
+      "predicted": "analysis"
+    },
+    {
+      "text": "It\u2019s actually made me like Tatum",
+      "gold": "reaction",
+      "predicted": "analysis"
+    },
+    {
+      "text": "Dude funded his own documentary, came out retirement to sign with the Kings and now everyone feels bad for him, lol. The switch up is crazy.",
+      "gold": "hot_take",
+      "predicted": "analysis"
+    },
+    {
+      "text": "Both teams didn\u2019t play that great except Maxey.",
+      "gold": "hot_take",
+      "predicted": "analysis"
+    },
+    {
+      "text": "Say what you will, i love this shit lol. Ridiculous quote and inflammatory just for the sake of it. You do you JB, it makes the league better",
+      "gold": "reaction",
+      "predicted": "hot_take"
+    },
+    {
+      "text": "Wasn't there one about Kobe's death with Bam lol but this is crossing the line",
+      "gold": "reaction",
+      "predicted": "hot_take"
+    },
+    {
+      "text": "Yeah the lost weight is helping him move. When he fell on the camera he looked like I haven\u2019t seen him in many years. If this team can find their shot it\u2019s gonna be pretty fucking nasty offensively, that the defense actually looked solid was one of the biggest questions of this roster.",
+      "gold": "hot_take",
+      "predicted": "analysis"
+    },
+    {
+      "text": "I think this joke is hilarious but counterpoint: as far as we know Ben Simmons never raped anyone.",
+      "gold": "hot_take",
+      "predicted": "hot_take"
+    },
+    {
+      "text": "This is one of the quotes you have to watch. This is an all timer \ud83e\udd23\ud83e\udd23\ud83e\udd23\ud83e\udd23 HELL OF A PR TEAM",
+      "gold": "reaction",
+      "predicted": "analysis"
+    },
+    {
+      "text": "yup. it\u2019s half emphasis and half health. the lesser offensive role and weight loss definitely makes that elite defense possible again. Embiid defense is the single biggest factor in this teams potential",
+      "gold": "hot_take",
+      "predicted": "analysis"
+    },
+    {
+      "text": "And shot 27.5% from 3 because it took them 3 quarters to start hitting some 3s. Thats definitely going to go up and this team will look unstoppable when it does. Embiid takes a couple weeks to get into form too.",
+      "gold": "analysis",
+      "predicted": "analysis"
+    },
+    {
+      "text": "What could possibly go wrong",
+      "gold": "reaction",
+      "predicted": "analysis"
+    },
+    {
+      "text": "I mean if it\u2019s one sided and Tatum doesn\u2019t care about it than it\u2019s probably not going to go anywhere even if JB wants it to.",
+      "gold": "hot_take",
+      "predicted": "hot_take"
+    },
+    {
+      "text": "He's what tho, 30? And he was in the NBA at 19? Anyone over 30 (or even close to it) can tell you, you are absolutely not the same person as you were at 19. Not even close. Not saying he's this changed man but it's just as likely that he thought he wouldn't care until not caring finally paid it's price. You learn so many lessons going from your teens to your 30s, it's like you've been in a war lol He could still be apathetic, sure. But he also went through a shit ton of ridicule, for years. Left the game in disgrace. But still kept in shape and actually became a starter again at 30. Idc if you're Ben Simmons, that's extremely hard to do and he did it at the highest possible level.",
+      "gold": "analysis",
+      "predicted": "reaction"
+    }
+  ]
+}

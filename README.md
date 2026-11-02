@@ -180,25 +180,19 @@ One thing I noticed while it trained: validation accuracy stayed at 0.472 and ma
 
 ## Baseline vs. Trained
 
-<!-- Both models on the same posts. `python baseline.py --trained results.json`
-     prints this table for you. -->
+Both models scored on the same 36 held-out comments from `test_split.csv` (seed 42). The baseline is `facebook/bart-large-mnli` run zero-shot with my definitions from `label_definitions.txt`.
 
 | Measure          | Baseline | Trained | Difference |
 | ---------------- | -------- | ------- | ---------- |
-| Overall accuracy |          |         |            |
-| Macro F1         |          |         |            |
-| F1 — `label_one` |          |         |            |
-| F1 — `label_two` |          |         |            |
+| Overall accuracy | 0.278    | 0.472   | +0.194     |
+| Macro F1         | 0.224    | 0.265   | +0.040     |
+| F1 — `analysis`  | 0.400    | 0.000   | -0.400     |
+| F1 — `hot_take`  | 0.273    | 0.627   | +0.355     |
+| F1 — `reaction`  | 0.000    | 0.167   | +0.167     |
 
-**What I predicted before I looked:**
+**What I predicted before I looked:** I expected the trained model to beat the baseline on `hot_take` and `reaction`, because it learned from labeled examples and the baseline got no `reaction` right at all, and to lose on `analysis`, because the baseline's best label was `analysis`, where my definition names concrete things like stats and rankings that a general model can spot from wording alone. This isn't a blind prediction: I had already seen my trained model's test numbers when the notebook printed them at the end of unit 5. The prediction held on all three labels.
 
-<!-- Milestone 1 asks you to write this BEFORE seeing the trained numbers. A
-     prediction made afterwards isn't one. -->
-
-**What the gap actually means:**
-
-<!-- If the baseline matched your trained model, your fine-tuning added
-     nothing — and that is a real finding, not a failure. Say it plainly. -->
+**What the gap actually means:** The trained model's accuracy is 19.4 points higher, but its macro F1 is only 0.04 higher, and that difference is the story. Accuracy rewards the biggest label, and `hot_take` is 16 of the 36 test comments. The trained model gains nearly all of its edge by predicting `hot_take` far more often, which matches what I saw during training, when validation accuracy stayed at 0.472 for all three epochs. It learned nothing about `analysis`, the one label the untrained model could already partly recognize from wording alone. It beats the baseline on paper mostly by leaning on the common label, not by learning my distinctions. The baseline is also slow: a few seconds per comment, against a fraction of a second for the fine-tuned model.
 
 ---
 
