@@ -198,33 +198,49 @@ Both models scored on the same 36 held-out comments from `test_split.csv` (seed 
 
 ## Run Log — Before
 
-<!-- Five criteria across three seeds. The notebook's section 6 prints the
-     spread table; the Target and Verdict columns are yours. -->
+Trained on CPU (`torch 2.14.1+cpu`), default settings, seeds 42, 7 and 2024. From `results_three_seeds_before.json`.
 
-| Criterion | Target | Seed 42 | Seed 7 | Seed 2024 | Verdict |
-| --------- | ------ | ------- | ------ | --------- | ------- |
-| 1.        |        |         |        |           |         |
-| 2.        |        |         |        |           |         |
-| 3.        |        |         |        |           |         |
-| 4.        |        |         |        |           |         |
-| 5.        |        |         |        |           |         |
+| Criterion                 | Target                                                          | Seed 42                  | Seed 7                   | Seed 2024                | Verdict |
+| ------------------------- | --------------------------------------------------------------- | ------------------------ | ------------------------ | ------------------------ | ------- |
+| 1. Overall accuracy       | ≥ 0.65 every seed                                               | 0.472                    | 0.444                    | 0.500                    | MISSED  |
+| 2. Per-label F1           | `hot_take` and `reaction` ≥ 0.60, `analysis` ≥ 0.50, every seed | a 0.00 · h 0.63 · r 0.17 | a 0.00 · h 0.62 · r 0.00 | a 0.00 · h 0.64 · r 0.31 | MISSED  |
+| 3. Label balance          | max ≤ 50%, min ≥ 20%                                            | max 44.6%, min 23.8%     | same                     | same                     | MET     |
+| 4. Agreement with staff   | ≥ 24 of 30                                                      | pending                  | pending                  | pending                  | pending |
+| 5. Beat baseline accuracy | ≥ +10 points every seed                                         | +19.4                    | +16.7                    | +8.3                     | MISSED  |
+
+Criterion 3 is a property of `labels.csv`, measured before training, so it is the same on every seed. Criterion 4 is measured once, against the staff set.
+
+**The spread across seeds:**
+
+| Measure          | Seed 42 | Seed 7 | Seed 2024 | Spread |
+| ---------------- | ------- | ------ | --------- | ------ |
+| Overall accuracy | 0.472   | 0.444  | 0.500     | 0.056  |
+| Macro F1         | 0.265   | 0.205  | 0.316     | 0.111  |
+| F1 — `analysis`  | 0.000   | 0.000  | 0.000     | 0.000  |
+| F1 — `hot_take`  | 0.627   | 0.615  | 0.640     | 0.025  |
+| F1 — `reaction`  | 0.167   | 0.000  | 0.308     | 0.308  |
+
+**The baseline on each seed's test split.** Criterion 5 is judged per seed, so I ran `baseline.py` on each seed's own 36 held-out comments, using the same stratified split the notebook uses:
+
+| Seed | Baseline accuracy | Trained accuracy | Gap    |
+| ---- | ----------------- | ---------------- | ------ |
+| 42   | 0.278             | 0.472            | +0.194 |
+| 7    | 0.278             | 0.444            | +0.167 |
+| 2024 | 0.417             | 0.500            | +0.083 |
+
+On seed 2024 the baseline's macro F1 (0.399) was higher than the trained model's (0.316).
 
 ### Confusion matrix
 
-<!-- ⚠️ TYPED AS A MARKDOWN TABLE. The notebook prints one ready to paste.
-     An image of a matrix earns nothing. -->
+Seed 42, from section 7.
 
-| true \ predicted |     |     |     |
-| ---------------- | --- | --- | --- |
-| \*\*\*\*         |     |     |     |
-| \*\*\*\*         |     |     |     |
-| \*\*\*\*         |     |     |     |
+| true \ predicted | analysis | hot_take | reaction |
+| ---------------- | -------- | -------- | -------- |
+| **analysis**     | 0        | 9        | 0        |
+| **hot_take**     | 0        | 16       | 0        |
+| **reaction**     | 0        | 10       | 1        |
 
-**My biggest off-diagonal number, and what it means:**
-
-<!-- Not "the model made mistakes" — WHICH boundary it didn't learn, and which
-     direction. "7 real analysis posts were called hot_take and only 3 went the
-     other way" is a direction, not just an error rate. -->
+**My biggest off-diagonal number, and what it means:** 10 real `reaction` comments were called `hot_take`, and none went the other way. But that pair isn't the real story: the model called 35 of 36 comments `hot_take`, including all 9 `analysis` comments. It didn't learn a confused boundary between two labels; it never learned to separate any of them and fell back on the most common label.
 
 ---
 
