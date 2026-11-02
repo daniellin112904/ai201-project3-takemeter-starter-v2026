@@ -37,3 +37,5 @@ skipped.txt
 to_prelabel.csv
 
 takemeter_out/
+
+data/staff_labels.csv
